@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.*;
 
+//Controller với khung nhìn của tài khoản sinh viên
 @Controller
 public class StudentScreenController {
     //Xem lịch sử học tập
@@ -42,6 +43,7 @@ public class StudentScreenController {
         return "student_screen/StudentScreen";
     }
 
+    //màn hình đăng kí khóa học
     @GetMapping("/enroll-course")
     public ModelAndView enroll(Model model, HttpServletRequest request){
         //laay thong tin username cua hoc vien

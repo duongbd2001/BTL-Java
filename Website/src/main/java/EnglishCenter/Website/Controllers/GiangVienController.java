@@ -19,6 +19,7 @@ public class GiangVienController {
     public GiangVienController(GiangVienService gvService) {
         this.gvService = gvService;
     }
+
     @GetMapping("/all-teachers")
     public String xemDanhSachTatCaHocVien(Model mod){
         mod.addAttribute("teachers", gvService.danhSachTatCaGiangVien());

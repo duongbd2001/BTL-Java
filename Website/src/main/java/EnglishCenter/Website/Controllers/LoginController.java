@@ -34,12 +34,13 @@ public class LoginController {
         return "index";
     }
 
+    //trang login
     @RequestMapping("/index")
     public String login(){
         return "login";
     }
 
-    //login
+    //điều hướng login
     @PostMapping("/login")
     public ModelAndView login(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, Model model, HttpServletRequest request){
         //kiểm tra tk và mk có trong DB hay ko
@@ -58,7 +59,7 @@ public class LoginController {
                 HttpSession session = request.getSession();
                 session.setAttribute("studentUsername", username);
                 session.setAttribute("studentName", hocVien.getTen());
-                //hiển thị model ra màn hình
+                //hiển thị model ra màn hình ở sidebar
                 model.addAttribute("name", hocVien.getTen());
                 model.addAttribute("username", username);
                 return new ModelAndView("student_screen/StudentScreen");
