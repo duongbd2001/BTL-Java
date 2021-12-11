@@ -1,0 +1,47 @@
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Regist course</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body{
+                background-color: rgb(8,17,59);
+            }
+            h2{
+                background-color: #2574A9;
+                color: whitesmoke;
+                border-radius: 10px;
+                padding: 10px;
+                text-align: center;
+            }
+            label{
+                color: #2574A9;
+                font-size: 24px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class ="col-lg-6 col-md-6 col-sm-6 container">
+            <form class="row g-3" th:action="@{/enroll-course}" th:object="${enroll}" method="post">
+                <h2 class="display-4 py-2 text-truncate col-md-12">REGIST COURSE</h2>
+                <div class="col-md-8">
+                    <label class="form-label">Course name</label>
+                    <input
+                            placeholder="Enter Course ID"
+                            type="text"
+                            name="courseID"
+                            required
+                            class="form-control"
+                    />
+                </div>
+                <div class="form-group col-md-4" style="margin-top: 45px">
+                    <input type="submit" class="btn btn-primary" value="Accept"></input>
+                </div>
+            </form>
+            <p style="color: red" th:text="${message}"></p>
+        </div>
+    </body>
+</html>
