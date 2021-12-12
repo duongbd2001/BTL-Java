@@ -20,11 +20,13 @@ public class GiangVienController {
         this.gvService = gvService;
     }
 
+    //xem danh sách giảng viên
     @GetMapping("/all-teachers")
     public String xemDanhSachTatCaHocVien(Model mod){
         mod.addAttribute("teachers", gvService.danhSachTatCaGiangVien());
         return "teacher_list";
     }
+    //thêm mới giảng viên
     @GetMapping("/all-teachers/new-teacher")
     public String taoGiangVien(Model mod){
         GiangVien gv = new GiangVien();
@@ -32,6 +34,7 @@ public class GiangVienController {
         mod.addAttribute("situation", "create_new");
         return "create_new_or_edit_teacher";
     }
+
     @PostMapping("/all-teachers/new-teacher")
     public String themGiangvienMoi(@ModelAttribute("teacher") GiangVien gv){
         if(!gvService.daTonTaiGiangVien(gv.getId())){
@@ -40,12 +43,16 @@ public class GiangVienController {
         }
         else return "message";  
     }
+
+    //xóa giảng viên
     @GetMapping("/all-teachers/delete/{id}")
     public String xoaGiangVienTheoID(@PathVariable String id){
         gvService.nghiDay(id);
         gvService.xoaGiangVien(id);
         return "redirect:/all-teachers";
     }
+
+    //tìm kiếm giảng viên
     @GetMapping("/all-teachers/search-result")
     public String timKiemGiangVien(@RequestParam(name = "keyword",required = true) String key, Model mod){
         List<GiangVien> ds = gvService.timKiemGiangVienVoiTuKhoa(key);
@@ -55,7 +62,8 @@ public class GiangVienController {
         mod.addAttribute("type", "GV");
         return "search_result";
     }
-    
+
+    //cập nhật thông tin giảng viên
     @GetMapping("/all-teachers/update/{id}")
     public String suaThongTinGiangVien(@PathVariable String id, Model mod){
         GiangVien gv = gvService.chonGiangVien(id);
@@ -68,14 +76,16 @@ public class GiangVienController {
         gvService.TaoGiangVienMoi(gv);
         return "redirect:/all-teachers";
     }
-    
+
+    //truy cập khung nhìn của giảng viên thông qua id giảng viên
     @GetMapping("/teacher/{id}")
     public String manHinhGiangVien(@PathVariable String id, Model mod){
         GiangVien gv = gvService.chonGiangVien(id);
         mod.addAttribute("teacher", gv);
         return "teacher_view";
     }
-    
+
+    //giảng viên xem và cập nhật lại thông tin cá nhân của mình
     @GetMapping("/profile/teacher/{id}")
     public String giangVienChinhSuaProfile(@PathVariable String id, Model mod){
         GiangVien gv = gvService.chonGiangVien(id);

@@ -62,7 +62,7 @@ public class StudentScreenController {
     @PostMapping("/enroll-course")
     public ModelAndView enroll(Model model, @RequestParam(name = "courseID") String courseID, HttpServletRequest request){
         Optional<Course> optionalCourse = courseRepo.findById(courseID);
-
+        //nếu id của course tồn tại
         if (optionalCourse.isPresent()){
             //laay thong tin username cua hoc vien
             HttpSession session = request.getSession();
@@ -71,13 +71,14 @@ public class StudentScreenController {
             Course course = courseRepo.getById(courseID);
             Enroll enroll = new Enroll();
             HocVien hocVien = hocVienRepo.findHocVienById(stu_id);
+            //thêm mới học viên vào trong danh sách học viên của khóa học
             enroll.setC(course);
             enroll.setHv(hocVien);
             enroll.setNgayDangKy(LocalDate.now());
             enrollRepo.save(enroll);
-//            studyHistoryService.addNewEnrollCourse();
             return new ModelAndView("redirect:/study");
         }else {
+            //nếu ko tồn tại hiện ra thông báo
             model.addAttribute("message", "Course does not exist");
             return new ModelAndView("student_screen/enroll");
         }

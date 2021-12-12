@@ -14,12 +14,13 @@ public class CourseController {
     public CourseController(CourseService cService) {
         this.cService = cService;
     }
-
+    //hiển thị tất cả các khóa học
     @GetMapping("/all-courses")
     public String getAllCourses(Model model) {
         model.addAttribute("courses", cService.getAllCourse());
         return "course_list";
     }
+    //tìm kiếm khóa học theo id hoặc tên khóa học
     @GetMapping("/all-courses/search-result")
     public String timKiemKhoaHoc(@RequestParam(name = "keyword", required = true) String key, Model mod){
         List<Course> ds = cService.timKiemKhoaHocVoiTuKhoa(key);
@@ -29,11 +30,13 @@ public class CourseController {
         mod.addAttribute("number_of_results", ds.size());
         return "search_result";
     }
+    //xóa khóa học
     @GetMapping("/all-courses/delete/{id}")
     public String xoaKhoaHocTheoID(@PathVariable String id){
         cService.xoaKhoaHoc(id);
         return "redirect:/all-courses";
     }
+    //tạo mới 1 khóa học
     @GetMapping("/all-courses/new-course")
     public String taoKhoaHoc(Model mod){
         Course c = new Course();
@@ -50,6 +53,7 @@ public class CourseController {
         }
         else return "message";
     }
+    //cập nhật lại thông tin khóa học
     @GetMapping("/all-courses/update/{id}")
     public String suaThongTinKhoaHoc(@PathVariable String id, Model mod){
         mod.addAttribute("choosencourse",cService.getCourseByID(id));
@@ -63,7 +67,7 @@ public class CourseController {
         cService.taoKhoaHocMoi(c);
         return "redirect:/all-courses";
     }
-    
+    //lấy ra danh sách sinh viên trong khóa học
     @GetMapping("/course/{id}/student-list")
     public String xemDanhSachHocVienCuaKhoaHoc(@PathVariable String id, Model mod){
         Course c = cService.getCourseByID(id);

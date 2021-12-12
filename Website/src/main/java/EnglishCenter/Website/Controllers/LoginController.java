@@ -43,33 +43,37 @@ public class LoginController {
     //điều hướng login
     @PostMapping("/login")
     public ModelAndView login(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, Model model, HttpServletRequest request){
-        //kiểm tra tk và mk có trong DB hay ko
+        //model kiểm tra tk và mk có trong DB hay ko
         Optional<Login> loginModel = loginRepository.findLoginModelByUsernameAndPassword(username,password);
+        //model login kiểm tra quyền hạn của nick đăng nhập
         Login login = loginRepository.findLoginByUsernameAndPassword(username,password);
 
         //Kiểm tra đối tượng trong DB
         if (loginModel.isPresent()){
+            //nếu quyền hạn là admin, điều hướng tới khung nhìn của admin
             if (login.getRole().equals("isAdmin")) {
                 model.addAttribute("loginModel", loginModel.get());
                 return new ModelAndView("admin");
-            }else if (login.getRole().equals("isStudent")){
+            }else if (login.getRole().equals("isStudent")){     //điều hướng tới khung nhìn của sinh viên
                 //tìm học sinh trong DB
                 HocVien hocVien = hocVienRepo.findHocVienById(username);
                 //Lưu tên đăng nhập vào session
                 HttpSession session = request.getSession();
                 session.setAttribute("studentUsername", username);
                 session.setAttribute("studentName", hocVien.getTen());
-                //hiển thị model ra màn hình ở sidebar
+                //hiển thị tên và mã sv ra màn hình ở sidebar
                 model.addAttribute("name", hocVien.getTen());
                 model.addAttribute("username", username);
                 return new ModelAndView("student_screen/StudentScreen");
             }else {
+                //điều hướng tới khung nhìn của giảng viên
                 GiangVien gv = gvService.chonGiangVien(username);
                 model.addAttribute("teacher", gv);
 
                 return new ModelAndView("teacher_view");
             }
         }else {
+            //hiện ra thông báo nếu sai tài khoản hoặc mật khẩu
             model.addAttribute("message", "Invalid username or password");
             return new ModelAndView("login");
         }
