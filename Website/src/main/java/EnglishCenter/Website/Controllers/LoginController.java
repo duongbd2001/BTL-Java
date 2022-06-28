@@ -1,11 +1,11 @@
 package EnglishCenter.Website.Controllers;
 
-import EnglishCenter.Website.Entities.GiangVien;
-import EnglishCenter.Website.Entities.HocVien;
+import EnglishCenter.Website.Entities.AdminViewEntity.Teacher;
+import EnglishCenter.Website.Entities.AdminViewEntity.Student;
 import EnglishCenter.Website.Entities.Login;
-import EnglishCenter.Website.Repositories.HocVienRepo;
+import EnglishCenter.Website.Repositories.AdminViewRepo.StudentRepo;
 import EnglishCenter.Website.Repositories.LoginRepo;
-import EnglishCenter.Website.Service.GiangVienService;
+import EnglishCenter.Website.Service.AdminViewService.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,15 +21,15 @@ import java.util.Optional;
 @Controller
 public class LoginController {
     @Autowired
-    private GiangVienService gvService;
+    private TeacherService teacherService;
 
     @Autowired
     private LoginRepo loginRepository;
     @Autowired
-    private HocVienRepo hocVienRepo;
+    private StudentRepo studentRepo;
 
     //Trang welcome
-    @RequestMapping("/welcome")
+    @PostMapping("/welcome")
     public String welcome(){
         return "index";
     }
@@ -53,24 +53,24 @@ public class LoginController {
             //nếu quyền hạn là admin, điều hướng tới khung nhìn của admin
             if (login.getRole().equals("isAdmin")) {
                 model.addAttribute("loginModel", loginModel.get());
-                return new ModelAndView("admin");
+                return new ModelAndView("adminView/admin");
             }else if (login.getRole().equals("isStudent")){     //điều hướng tới khung nhìn của sinh viên
                 //tìm học sinh trong DB
-                HocVien hocVien = hocVienRepo.findHocVienById(username);
+                Student hocVien = studentRepo.findHocVienById(username);
                 //Lưu tên đăng nhập vào session
                 HttpSession session = request.getSession();
                 session.setAttribute("studentUsername", username);
-                session.setAttribute("studentName", hocVien.getTen());
+                session.setAttribute("studentName", hocVien.getName());
                 //hiển thị tên và mã sv ra màn hình ở sidebar
-                model.addAttribute("name", hocVien.getTen());
+                model.addAttribute("name", hocVien.getName());
                 model.addAttribute("username", username);
-                return new ModelAndView("student_screen/StudentScreen");
+                return new ModelAndView("studentView/studentView");
             }else {
                 //điều hướng tới khung nhìn của giảng viên
-                GiangVien gv = gvService.chonGiangVien(username);
+                Teacher gv = teacherService.selectTeacher(username);
                 model.addAttribute("teacher", gv);
 
-                return new ModelAndView("teacher_view");
+                return new ModelAndView("teacherView/teacher_view");
             }
         }else {
             //hiện ra thông báo nếu sai tài khoản hoặc mật khẩu
